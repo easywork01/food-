@@ -38,18 +38,18 @@ const Body = () => {
 
     return (allRestaurants?.length === 0) ? <Shimmer /> : (
       <>  
-      <div className="search-container">
+      <div className="p-5 bg- bg-red-400 my-5 ">
 
         <input 
         type="text" 
-        className="search-input" 
+        className="focus:bg-green-50 p-2 m-2 rounded-lg" 
         placeholder="Search" 
         value={searchInput} 
         onChange={(e) => setSearchInput(e.target.value)} 
         />
         
         <button 
-        className="search-btn" 
+        className="p-2 m-2 bg-red-600 rounded-lg text-white hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring focus:ring-red-300" 
         onClick = { ()=> {
           //when we click we need to filter data and find out restraunt is present or not in restraunt list
 
@@ -61,7 +61,7 @@ const Body = () => {
         </button>
 
       </div>
-      <div className="restraunt-list">
+      <div className="flex flex-wrap">
         {filteredRestaurants.map((restaurant) => (
           <Link to={"/restaurant/" + restaurant.info.id} key={restaurant.id}>
           <RestrautntCard {...restaurant.info} />
