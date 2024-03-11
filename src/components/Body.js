@@ -65,20 +65,17 @@ const Body = () => {
     <Shimmer />
   ) : (
     <>
-      <div className="p-5 bg- bg-red-400 my-5 ">
+      <div className="flex justify-center items-center bg-gray-100 p-5 my-5 rounded-lg shadow-md">
         <input
           type="text"
-          className="focus:bg-green-50 p-2 m-2 rounded-lg"
-          placeholder="Search"
+          className="focus:bg-white focus:border-gray-300 p-3 m-2 rounded-lg border-2 border-transparent transition-all duration-300 w-full md:w-96 text-gray-800 placeholder-gray-500"
+          placeholder="Search Restaurants"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
         />
-
         <button
-          className="p-2 m-2 bg-red-600 rounded-lg text-white hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring focus:ring-red-300"
+          className="p-3 bg-red-600 rounded-lg text-white hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring focus:ring-red-300 transition-all duration-300"
           onClick={() => {
-            //when we click we need to filter data and find out restraunt is present or not in restraunt list
-
             const data = filterData(searchInput, allRestaurants);
             console.log(data);
             setFilteredRestaurants(data);
@@ -87,6 +84,7 @@ const Body = () => {
           Search
         </button>
       </div>
+
       <div className="flex flex-wrap">
         {filteredRestaurants.map((restaurant) => (
           <Link to={"/restaurant/" + restaurant.info.id} key={restaurant.id}>
