@@ -16,6 +16,7 @@ const Body = () => {
   const [allRestaurants, setAllRestaurants] = useState([]);
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [loading, setLoading] = useState(true);
   //declare it state variable outside the retur statement otherwise it will be out of scope
   // const [searchClick, setSearchClick] = useState("false");
 
@@ -31,39 +32,37 @@ const Body = () => {
       const data = await fetch(swiggy_api_URL); //""data/response"
       const json = await data.json();
       console.log(json);
-      async function checkJsonData(jsonData) {
-        for (let i = 0; i < jsonData?.data?.cards.length; i++) {
-          // initialize checkData for Swiggy Restaurant data
-          let checkData =
-            json?.data?.cards[i]?.card?.card?.gridElements?.infoWithStyle
-              ?.restaurants;
-
-          // if checkData is not undefined then return it
-          if (checkData !== undefined) {
-            return checkData;
-          }
-        }
-      }
-
       // call the checkJsonData() function which return Swiggy Restaurant data
       const resData = await checkJsonData(json);
 
       // update the state variable restaurants with Swiggy API data
       setAllRestaurants(resData);
+      setLoading(false);
       setFilteredRestaurants(resData);
     } catch (error) {
       console.log(error);
     }
   }
 
-  //not render component(early return)
-  if (!allRestaurants) return null;
+  async function checkJsonData(jsonData) {
+    for (let i = 0; i < jsonData?.data?.cards.length; i++) {
+      // initialize checkData for Swiggy Restaurant data
+      let checkData =
+        jsonData?.data?.cards[i]?.card?.card?.gridElements?.infoWithStyle
+          ?.restaurants;
 
-  // if(filteredRestaurants.length ===0) return<h1>Restaurant Not Found</h1>;
+      // if checkData is not undefined then return it
+      if (checkData !== undefined) {
+        return checkData;
+      }
+    }
+  }
 
-  return allRestaurants?.length === 0 ? (
-    <Shimmer />
-  ) : (
+  if (loading) {
+    console.log("Loading...");
+    return <Shimmer />;
+  }
+  return (
     <>
       <div className="flex justify-center items-center bg-gray-100 p-5 my-5 rounded-lg shadow-md">
         <input
@@ -85,7 +84,7 @@ const Body = () => {
         </button>
       </div>
 
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap justify-center">
         {filteredRestaurants.map((restaurant) => (
           <Link to={"/restaurant/" + restaurant.info.id} key={restaurant.id}>
             <RestrautntCard {...restaurant.info} />
